@@ -1,0 +1,590 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biodata Generator</title>
+    <style>
+        /* Basic styling for the body */
+        body {
+            font-family: sans-serif;
+        }
+        /* Container for the entire biodata form */
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        /* Flexbox row for labels and input values */
+        .row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        /* Styling for labels */
+        .label {
+            width: 150px;
+            font-weight: bold;
+        }
+        /* Styling for input value areas */
+        .value {
+            flex-grow: 1;
+        }
+        /* Styling for all text, number, select, and date inputs */
+        input[type="text"], input[type="number"], select, input[type="date"] {
+            width: calc(100% - 5px);
+            padding: 5px;
+            border: 1px solid #eee;
+        }
+        /* Styling for tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        /* Styling for table headers and data cells */
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        /* Style for all buttons */
+        button {
+            padding: 8px 15px; /* Smaller padding */
+            background-color: #4CAF50; /* Green background */
+            color: white;
+            border: none;
+            border-radius: 5px; /* Slightly rounded corners */
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Subtle shadow */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition for hover effects */
+        }
+        /* Hover effect for buttons */
+        button:hover {
+            background-color: #45a049; /* Darker green on hover */
+            transform: translateY(-1px); /* Slight lift on hover */
+        }
+        /* Active (click) effect for buttons */
+        button:active {
+            transform: translateY(0); /* Press effect */
+        }
+
+        /* Styling for the signature area */
+        .signature-area {
+            margin-top: 30px;
+            text-align: right;
+        }
+        /* Styling for toggle sections (checkboxes) */
+        .toggle-section {
+            margin-top: 15px;
+        }
+        /* Styling for table control buttons (Add Row, Remove Row) */
+        .table-controls {
+            margin-top: 10px;
+        }
+        /* Specific style for Add Row and Remove Row buttons (30% smaller) */
+        .table-controls button {
+            margin-right: 10px;
+            padding: 5px 10px; /* 30% smaller padding */
+        }
+        /* Styling for the declaration text */
+        .declaration {
+            margin-top: 30px;
+            font-size: 10px;
+            text-align: center;
+            font-style: italic;
+        }
+        /* Style for the PDF options container */
+        .pdf-options {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .pdf-options label {
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="text-align: center; font-weight: bold; text-decoration: underline;">BIO DATA</h2>
+
+        <div class="row">
+            <div class="label">Upload Photo</div>
+            <div class="value">
+                <input type="file" id="photoUpload" accept="image/*" onchange="previewPhoto(event)">
+                <div style="margin-top: 10px;">
+                    <img id="photoPreview" src="" alt="Passport Photo Preview" style="max-width: 100px; max-height: 120px; display: none; border: 1px solid #ccc;">
+                </div>
+            </div>
+        </div>
+
+        <div class="row"><div class="label">Name</div><div class="value"><input type="text" id="name"></div></div>
+        <div class="row"><div class="label">Mobile</div><div class="value"><input type="text" id="mobile"></div></div>
+        <div class="row"><div class="label">Email id</div><div class="value"><input type="text" id="email"></div></div>
+        <div class="row"><div class="label">Father's Name</div><div class="value"><input type="text" id="father_name"></div></div>
+        <div class="row"><div class="label">Gender</div><div class="value">
+            <select id="gender">
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Other">Other</option>
+            </select>
+        </div></div>
+        <div class="row"><div class="label">Date of Birth</div><div class="value"><input type="date" id="dob"></div></div>
+        <div class="row"><div class="label">Marital Status</div><div class="value">
+            <select id="marital_status">
+                <option value="Married">Married</option>
+                <option value="Single">Single</option>
+                <option value="Divorced">Divorced</option>
+                <option value="Widowed">Widowed</option>
+            </select>
+        </div></div>
+        <div class="row"><div class="label">Religion</div><div class="value"><input type="text" id="religion"></div></div>
+        <div class="row"><div class="label">Languages Known</div><div class="value"><input type="text" id="languages"></div></div>
+
+        <div class="row" id="single_qualification_row" style="display: none;">
+            <div class="label">Qualification</div>
+            <div class="value"><input type="text" id="qualification"></div>
+        </div>
+        <div class="toggle-section">
+            <label><input type="checkbox" id="show_education" checked> Show Educational Qualifications</label>
+        </div>
+        <div id="education_section">
+            <h3>Educational qualifications:</h3>
+            <table id="education_table">
+                <thead>
+                    <tr><th>Education</th><th>Institute Name</th><th>Year of Passing</th><th>Marks Percentage</th></tr>
+                </thead>
+                <tbody id="education_table_body"></tbody>
+            </table>
+            <div class="table-controls">
+                <button type="button" onclick="addEducationRow()">Add Row</button>
+                <button type="button" onclick="removeEducationRow()">Remove Row</button>
+            </div>
+        </div>
+
+        <div class="toggle-section">
+            <label><input type="checkbox" id="show_experience" checked> Show Experience</label>
+        </div>
+        <div id="experience_section">
+            <h3>Experience :</h3>
+            <table id="experience_table">
+                <thead>
+                    <tr><th>Company Name</th><th>Position</th><th>Working Period</th></tr>
+                </thead>
+                <tbody id="experience_table_body"></tbody>
+            </table>
+            <div class="table-controls">
+                <button type="button" onclick="addExperienceRow()">Add Row</button>
+                <button type="button" onclick="removeExperienceRow()">Remove Row</button>
+            </div>
+        </div>
+
+        <div class="toggle-section">
+            <label><input type="checkbox" id="show_other_qualifications" checked> Show Other Qualifications</label>
+        </div>
+        <div id="other_qualifications_section">
+            <h3>Other Qualifications :</h3>
+            <table id="other_qualifications_table">
+                <thead>
+                    <tr><th>Qualification</th><th>Institute Name</th><th>Year of Passing</th><th>Marks Percentage</th></tr>
+                </thead>
+                <tbody id="other_qualifications_table_body"></tbody>
+            </table>
+            <div class="table-controls">
+                <button type="button" onclick="addOtherQualificationRow()">Add Row</button>
+                <button type="button" onclick="removeOtherQualificationRow()">Remove Row</button>
+            </div>
+        </div>
+        <div class="row"><div class="label">Address</div><div class="value"><input type="text" id="address"></div></div>
+        <div class="row"><div class="label">Place</div><div class="value"><input type="text" id="place"></div></div>
+        <div class="row"><div class="label">Date</div><div class="value"><input type="date" id="date"></div></div>
+
+        <div class="declaration">
+            I hereby declare that all the details mentioned in this Bio Data are true and correct to the best of my knowledge and belief. I take full responsibility for the accuracy of the information provided.
+        </div>
+
+        <div class="signature-area">Signature</div>
+
+        <div class="pdf-options">
+            <button onclick="generatePDF()">Download as PDF</button>
+            <label>
+                <input type="checkbox" id="set_all_data_in_one_page"> Set all data in one page (Shrink to fit, no overlap)
+            </label>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.1/jspdf.plugin.autotable.min.js"></script>
+    <script>
+        let uploadedPhotoBase64 = ""; // Variable to store the uploaded photo as base64
+
+        /**
+         * Previews the selected photo and converts it to base64.
+         * @param {Event} event - The change event from the file input.
+         */
+        function previewPhoto(event) {
+            const input = event.target;
+            const preview = document.getElementById('photoPreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    uploadedPhotoBase64 = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        /**
+         * Checks the state of the qualification checkboxes and shows/hides the single qualification field.
+         */
+        function checkQualificationVisibility() {
+            const showEducation = document.getElementById('show_education').checked;
+            const showExperience = document.getElementById('show_experience').checked;
+            const showOtherQualifications = document.getElementById('show_other_qualifications').checked;
+            const singleQualificationRow = document.getElementById('single_qualification_row');
+
+            // If none of the main qualification/experience sections are shown, show the single qualification field
+            if (!showEducation && !showExperience && !showOtherQualifications) {
+                singleQualificationRow.style.display = 'flex'; // Show the row
+            } else {
+                singleQualificationRow.style.display = 'none'; // Hide the row
+                document.getElementById('qualification').value = ''; // Clear its value when hidden
+            }
+        }
+
+        /**
+         * Generates a PDF document with the biodata.
+         */
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            let y = 20; // Initial Y position for content
+            const margin = 15; // Standard page margin
+            const pageHeight = pdf.internal.pageSize.getHeight(); // Get total page height
+
+            // Get the state of the "Set all data in one page" checkbox
+            const setAllDataInOnePage = document.getElementById('set_all_data_in_one_page').checked;
+
+            // Define font sizes based on checkbox state
+            const defaultFontSize = 12;
+            const reducedFontSize = 8; // Smaller font size for "one page" option
+            const currentFontSize = setAllDataInOnePage ? reducedFontSize : defaultFontSize;
+
+            // Adjust line height based on checkbox state
+            const defaultLineHeightMultiplier = 1.2;
+            const reducedLineHeightMultiplier = 1.0; // More compact line height
+            const currentLineHeight = currentFontSize * (setAllDataInOnePage ? reducedLineHeightMultiplier : defaultLineHeightMultiplier);
+
+            // Estimate the height required for the fixed bottom block (Place, Date, Declaration, Signature)
+            // This estimate is now dynamic based on the current font size and line height.
+            const estimatedFinalBlockHeight = currentFontSize * 6; // Approx 2 lines for Place/Date + 3 lines for declaration + signature
+
+            // Add uploaded photo if available
+            if (uploadedPhotoBase64) {
+                // Adjust photo position if font size is reduced to save space
+                const photoWidth = setAllDataInOnePage ? 30 : 35;
+                const photoHeight = setAllDataInOnePage ? 40 : 45;
+                pdf.addImage(uploadedPhotoBase64, 'JPEG', pdf.internal.pageSize.getWidth() - (margin + photoWidth), 15, photoWidth, photoHeight);
+            }
+
+            // Add "BIO DATA" title
+            pdf.setFontSize(currentFontSize + 8); // Title slightly larger than body text
+            pdf.setFont('helvetica', 'bold'); // Set font to bold for the title
+            pdf.text('BIO DATA', pdf.internal.pageSize.getWidth() / 2, y, { align: 'center' }); // Center align the title
+            pdf.line(pdf.internal.pageSize.getWidth() / 2 - 20, y + 2, pdf.internal.pageSize.getWidth() / 2 + 20, y + 2); // Underline the title
+            y += currentLineHeight + (setAllDataInOnePage ? 2 : 5); // Adjust y based on new line height and compact spacing
+            pdf.setFontSize(currentFontSize); // Reset font to current size for subsequent text
+            pdf.setFont('helvetica', 'normal'); // Reset font to normal for subsequent text
+
+            // Define fields for personal information (Place and Date removed from here, Address added)
+            const fields = [
+                { label: 'Name', value: document.getElementById('name').value },
+                { label: 'Mobile', value: document.getElementById('mobile').value },
+                { label: 'Email id', value: document.getElementById('email').value },
+                { label: "Father's Name", value: document.getElementById('father_name').value },
+                { label: 'Gender', value: document.getElementById('gender').value },
+                { label: 'Date of Birth', value: document.getElementById('dob').value ? new Date(document.getElementById('dob').value).toLocaleDateString('en-IN') : '' },
+                { label: 'Marital Status', value: document.getElementById('marital_status').value },
+                { label: 'Religion', value: document.getElementById('religion').value },
+                { label: 'Languages Known', value: document.getElementById('languages').value },
+                { label: 'Address', value: document.getElementById('address').value } // Added Address field here
+            ];
+
+            // Add personal information to PDF
+            fields.forEach(field => {
+                // Always check for page breaks to prevent overlap, regardless of checkbox state
+                if (y + currentLineHeight + estimatedFinalBlockHeight > pageHeight - margin) {
+                    pdf.addPage();
+                    y = margin; // Reset Y to top margin of new page
+                }
+                pdf.setFont('helvetica', 'bold');
+                pdf.text(`${field.label}:`, margin, y);
+                pdf.setFont('helvetica', 'normal');
+                pdf.text(field.value, margin + 45, y);
+                y += currentLineHeight;
+            });
+
+            // Add the new "Qualification" field if it's visible
+            const singleQualificationRow = document.getElementById('single_qualification_row');
+            if (singleQualificationRow.style.display !== 'none') {
+                const qualificationValue = document.getElementById('qualification').value;
+                if (qualificationValue) { // Only add if it has a value
+                    if (y + currentLineHeight + estimatedFinalBlockHeight > pageHeight - margin) {
+                        pdf.addPage();
+                        y = margin;
+                    }
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.text(`Qualification:`, margin, y);
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.text(qualificationValue, margin + 45, y);
+                    y += currentLineHeight;
+                }
+            }
+
+
+            // Add Educational Qualifications section if checked
+            if (document.getElementById('show_education').checked) {
+                y += (setAllDataInOnePage ? currentLineHeight * 0.5 : currentLineHeight); // Add less space if compact
+                // Always check for page breaks to prevent overlap
+                if (y + 2 * currentLineHeight + estimatedFinalBlockHeight > pageHeight - margin) {
+                    pdf.addPage();
+                    y = margin;
+                }
+                pdf.setFontSize(currentFontSize + 2); // Section title slightly larger
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('Educational Qualifications:', margin, y);
+                y += currentLineHeight;
+                pdf.setFontSize(currentFontSize); // Reset font for table
+                pdf.setFont('helvetica', 'normal');
+
+                const educationRows = document.querySelectorAll('#education_table_body tr');
+                const educationData = [];
+                educationRows.forEach(row => {
+                    const education = row.querySelector('input[name="education[]"]').value;
+                    const institute = row.querySelector('input[name="institute[]"]').value;
+                    const year = row.querySelector('input[name="passing_year[]"]').value;
+                    const marks = row.querySelector('input[name="marks[]"]').value;
+                    educationData.push([education, institute, year, marks]);
+                });
+
+                pdf.autoTable({
+                    head: [['Education', 'Institute Name', 'Year of Passing', 'Marks Percentage']],
+                    body: educationData,
+                    startY: y,
+                    margin: { left: margin, right: margin },
+                    styles: { fontSize: currentFontSize, cellPadding: setAllDataInOnePage ? 1 : 2 }, // Apply current font size and reduced padding
+                    headStyles: { fontSize: currentFontSize }, // Apply current font size to table header
+                    // autoTable automatically handles page breaks, so we just need to update y after it.
+                });
+                y = pdf.autoTable.previous.finalY + (setAllDataInOnePage ? currentLineHeight * 0.5 : currentLineHeight); // Update y after table
+            }
+
+            // Add Experience section if checked
+            if (document.getElementById('show_experience').checked) {
+                y += (setAllDataInOnePage ? currentLineHeight * 0.5 : currentLineHeight);
+                // Always check for page breaks to prevent overlap
+                if (y + 2 * currentLineHeight + estimatedFinalBlockHeight > pageHeight - margin) {
+                    pdf.addPage();
+                    y = margin;
+                }
+                pdf.setFontSize(currentFontSize + 2);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('Experience:', margin, y);
+                y += currentLineHeight;
+                pdf.setFontSize(currentFontSize);
+                pdf.setFont('helvetica', 'normal');
+
+                const experienceRows = document.querySelectorAll('#experience_table_body tr');
+                const experienceData = [];
+                experienceRows.forEach(row => {
+                    // Get values in the desired order: Company Name, Position, Working Period
+                    const company = row.querySelector('input[name="company_name[]"]').value;
+                    const position = row.querySelector('input[name="position[]"]').value;
+                    const period = row.querySelector('input[name="working_period[]"]').value;
+                    experienceData.push([company, position, period]);
+                });
+
+                pdf.autoTable({
+                    // Update table header to reflect the new order and removal of Serial no.
+                    head: [['Company Name', 'Position', 'Working Period']],
+                    body: experienceData,
+                    startY: y,
+                    margin: { left: margin, right: margin },
+                    styles: { fontSize: currentFontSize, cellPadding: setAllDataInOnePage ? 1 : 2 },
+                    headStyles: { fontSize: currentFontSize },
+                });
+                y = pdf.autoTable.previous.finalY + (setAllDataInOnePage ? currentLineHeight * 0.5 : currentLineHeight);
+            }
+
+            // Add Other Qualifications section if checked
+            if (document.getElementById('show_other_qualifications').checked) {
+                y += (setAllDataInOnePage ? currentLineHeight * 0.5 : currentLineHeight);
+                // Always check for page breaks to prevent overlap
+                if (y + 2 * currentLineHeight + estimatedFinalBlockHeight > pageHeight - margin) {
+                    pdf.addPage();
+                    y = margin;
+                }
+                pdf.setFontSize(currentFontSize + 2);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('Other Qualifications:', margin, y);
+                y += currentLineHeight;
+                pdf.setFontSize(currentFontSize);
+                pdf.setFont('helvetica', 'normal');
+
+                const otherQualificationsRows = document.querySelectorAll('#other_qualifications_table_body tr');
+                const otherQualificationsData = [];
+                otherQualificationsRows.forEach(row => {
+                    const qualification = row.querySelector('input[name="other_qualification[]"]').value;
+                    const institute = row.querySelector('input[name="other_institute[]"]').value;
+                    const year = row.querySelector('input[name="other_passing_year[]"]').value;
+                    const marks = row.querySelector('input[name="other_marks[]"]').value;
+                    otherQualificationsData.push([qualification, institute, year, marks]);
+                });
+
+                pdf.autoTable({
+                    head: [['Qualification', 'Institute Name', 'Year of Passing', 'Marks Percentage']],
+                    body: otherQualificationsData,
+                    startY: y,
+                    margin: { left: margin, right: margin },
+                    styles: { fontSize: currentFontSize, cellPadding: setAllDataInOnePage ? 1 : 2 },
+                    headStyles: { fontSize: currentFontSize },
+                });
+                y = pdf.autoTable.previous.finalY + (setAllDataInOnePage ? currentLineHeight * 0.5 : currentLineHeight);
+            }
+
+            // Retrieve Place and Date values for placement before declaration
+            const place = document.getElementById('place').value;
+            const date = document.getElementById('date').value ? new Date(document.getElementById('date').value).toLocaleDateString('en-IN') : '';
+
+            // Crucial check: If there isn't enough space for the final block on the current page, add a new page.
+            // This check is ALWAYS active to prevent overlap.
+            if (pageHeight - y < estimatedFinalBlockHeight + margin) {
+                pdf.addPage();
+                y = margin; // Reset y for the new page
+            }
+
+            // Calculate positions for the bottom block (Place, Date, Declaration, Signature)
+            // These positions are relative to the bottom of the *current* page.
+            const signatureY = pageHeight - margin; // Position signature closer to the bottom margin
+            const declarationY = signatureY - (currentLineHeight * 3); // Adjust based on dynamic line height for declaration
+            const placeDateStartingY = declarationY - (currentLineHeight * 2) - (setAllDataInOnePage ? 2 : 5); // 2 lines + smaller gap if compact
+
+            // Add Place
+            pdf.setFontSize(currentFontSize);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`Place:`, margin, placeDateStartingY);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(place, margin + 45, placeDateStartingY);
+
+            // Add Date
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`Date:`, margin, placeDateStartingY + currentLineHeight);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(date, margin + 45, placeDateStartingY + currentLineHeight);
+
+            // Add Declaration Text
+            pdf.setFontSize(currentFontSize * 0.8); // Declaration text slightly smaller than main text
+            pdf.setFont('helvetica', 'italic');
+            pdf.text('I hereby declare that all the details mentioned in this Bio Data are true and correct to the best of my knowledge and belief. I take full responsibility for the accuracy of the information provided.', margin, declarationY, { maxWidth: pdf.internal.pageSize.getWidth() - 2 * margin });
+
+            // Add Signature
+            pdf.setFontSize(currentFontSize); // Signature text same as main text
+            pdf.setFont('helvetica', 'normal');
+            pdf.text('Signature', pdf.internal.pageSize.getWidth() - margin - 60, signatureY);
+
+            pdf.save('biodata.pdf'); // Save the PDF
+        }
+
+        /**
+         * Adds a new row to the Educational Qualifications table.
+         */
+        function addEducationRow() {
+            const tableBody = document.getElementById('education_table_body');
+            const newRow = tableBody.insertRow();
+            newRow.innerHTML = `
+                <td><input type="text" name="education[]"></td>
+                <td><input type="text" name="institute[]"></td>
+                <td><input type="number" name="passing_year[]"></td>
+                <td><input type="text" name="marks[]"></td>
+            `;
+        }
+
+        /**
+         * Removes the last row from the Educational Qualifications table.
+         */
+        function removeEducationRow() {
+            const tableBody = document.getElementById('education_table_body');
+            if (tableBody.rows.length > 0) {
+                tableBody.deleteRow(-1);
+            }
+        }
+
+        /**
+         * Adds a new row to the Experience table.
+         */
+        function addExperienceRow() {
+            const tableBody = document.getElementById('experience_table_body');
+            const newRow = tableBody.insertRow();
+            newRow.innerHTML = `
+                <td><input type="text" name="company_name[]"></td>
+                <td><input type="text" name="position[]"></td>
+                <td><input type="text" name="working_period[]"></td>
+            `;
+        }
+
+        /**
+         * Removes the last row from the Experience table.
+         */
+        function removeExperienceRow() {
+            const tableBody = document.getElementById('experience_table_body');
+            if (tableBody.rows.length > 0) {
+                tableBody.deleteRow(-1);
+            }
+        }
+
+        /**
+         * Adds a new row to the Other Qualifications table (now similar to education).
+         */
+        function addOtherQualificationRow() {
+            const tableBody = document.getElementById('other_qualifications_table_body');
+            const newRow = tableBody.insertRow();
+            newRow.innerHTML = `
+                <td><input type="text" name="other_qualification[]"></td>
+                <td><input type="text" name="other_institute[]"></td>
+                <td><input type="number" name="other_passing_year[]"></td>
+                <td><input type="text" name="other_marks[]"></td>
+            `;
+        }
+
+        /**
+         * Removes the last row from the Other Qualifications table.
+         */
+        function removeOtherQualificationRow() {
+            const tableBody = document.getElementById('other_qualifications_table_body');
+            if (tableBody.rows.length > 0) {
+                tableBody.deleteRow(-1);
+            }
+        }
+
+        // Call functions to add one row to each table on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            addEducationRow();
+            addExperienceRow();
+            addOtherQualificationRow();
+
+            // Event listeners for the checkboxes to check qualification visibility
+            document.getElementById('show_education').addEventListener('change', checkQualificationVisibility);
+            document.getElementById('show_experience').addEventListener('change', checkQualificationVisibility);
+            document.getElementById('show_other_qualifications').addEventListener('change', checkQualificationVisibility);
+
+            // Initial check on page load
+            checkQualificationVisibility();
+        });
+    </script>
+</body>
+</html>

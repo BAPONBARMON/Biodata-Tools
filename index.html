@@ -2,275 +2,205 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Simple Bio Data Tool</title>
+<title>Biodata Tool</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- html2pdf -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-body{
-  margin:0;
-  font-family:"Segoe UI", Arial, sans-serif;
-  background:#e9f5ee;
-}
-.wrapper{
-  max-width:900px;
-  margin:auto;
-  padding:20px;
-}
-
-/* ===== FORM ===== */
-#formBox{
-  background:#ffffff;
-  padding:25px;
-  border-radius:10px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.1);
-}
-#formBox h2{
-  text-align:center;
-  color:#0b7a4b;
-}
-input, textarea{
-  width:100%;
-  padding:10px;
-  margin-bottom:12px;
-  border-radius:6px;
-  border:1px solid #b6e2c7;
-  font-size:15px;
-}
-button{
-  width:100%;
-  padding:12px;
-  font-size:16px;
-  cursor:pointer;
-  border:none;
-  border-radius:6px;
-  background:#0b7a4b;
-  color:#fff;
-  font-weight:bold;
-}
-
-/* ===== LOADER ===== */
-#overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  z-index:999;
-  align-items:center;
-  justify-content:center;
-}
-.spinner{
-  width:60px;
-  height:60px;
-  border:5px solid #00ff99;
-  border-top:5px solid transparent;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-}
-@keyframes spin{100%{transform:rotate(360deg);}}
-
-/* ===== BIODATA ===== */
-#bioBox{
-  display:none;
-  background:#fff;
-  border:2px solid #777;
-  padding:30px;
-}
-
-/* BIO DATA HEADING + UNDERLINE */
-.header{
-  text-align:center;
-  margin-bottom:10px;
-}
-.title{
-  font-weight:bold;
-  font-size:20px;
-}
-.underline{
-  width:120px;
-  height:2px;
-  background:#000;
-  margin:6px auto 20px auto;
-}
-
-/* TOP SECTION */
-.top{
-  display:flex;
-  justify-content:space-between;
-}
-
-/* PASSPORT PHOTO (35mm x 45mm ratio) */
-.photo{
-  width:132px;      /* approx 35mm */
-  height:170px;     /* approx 45mm */
-  border:1px solid #000;
-}
-.photo img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-/* DETAILS */
-.row{margin-bottom:6px;}
-.label{
-  display:inline-block;
-  width:180px;
-  font-weight:bold;
-}
-.section{
-  margin-top:20px;
-  font-weight:bold;
-  text-decoration:underline;
-}
-.footer{
-  margin-top:40px;
-  display:flex;
-  justify-content:space-between;
-}
-
-/* DOWNLOAD */
-.download-btn{
-  margin-top:30px;
-  background:#000;
-  color:#00ff88;
-  border:2px solid #00ff88;
-  font-size:18px;
-  padding:12px;
-}
-.download-btn:hover{
-  background:#00ff88;
-  color:#000;
-}
+/* --- (CSS SAME AS BEFORE, NO CHANGE) --- */
+body{margin:0;background:#0f2f1f;font-family:Arial,sans-serif;}
+.container{max-width:520px;margin:15px auto;background:#eafff2;padding:15px;border-radius:10px;border:1px solid #8be0b0;}
+h2{text-align:center;color:#145c3a;}
+label{font-weight:bold;margin-top:10px;display:block;color:#145c3a;}
+input,textarea,select{width:100%;padding:9px;font-size:14px;border-radius:5px;border:1px solid #8be0b0;background:#f6fffa;box-sizing:border-box;}
+textarea{resize:none;}
+button{width:100%;margin-top:12px;padding:12px;font-size:16px;background:#1f7a4a;color:#fff;border:none;border-radius:6px;cursor:pointer;}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:9999;}
+.android-spinner{width:56px;height:56px;border:6px solid rgba(255,255,255,.3);border-top:6px solid #7CFFB2;border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#biodata{width:210mm;min-height:297mm;padding:24mm;background:#fff;display:none;font-size:20px;line-height:1.85;}
+.bio-header{text-align:center;font-size:32px;font-weight:bold;text-decoration:underline;margin-bottom:28px;}
+.bio-top{display:flex;gap:18px;}
+.photo-box{width:115px;height:130px;border:1px solid #000;margin-left:-22px;margin-top:6px;}
+.photo-box img{width:100%;height:100%;object-fit:cover;}
+table{width:100%;border-collapse:collapse;}
+td{padding:7px 4px;vertical-align:top;}
+.label{width:30%;font-weight:bold;}
+.colon{width:3%;text-align:center;font-weight:bold;}
+.value{width:67%;word-break:break-word;}
+.declaration{margin-top:30px;}
+.sign-row{margin-top:32px;display:flex;justify-content:space-between;}
+.signature-box{width:160px;text-align:center;}
+.signature-line{border-top:1px solid #000;margin-top:38px;}
 </style>
 </head>
 
 <body>
 
-<div class="wrapper">
+<div class="container">
+<h2>Biodata Form</h2>
 
-<!-- FORM -->
-<div id="formBox">
-<h2>Fill Bio Data</h2>
+<label>Photo</label>
+<input type="file" id="photo" accept="image/*">
 
-<input id="name" placeholder="Name">
-<input id="fname" placeholder="Father's Name">
-<input id="mobile" placeholder="Mobile">
-<input id="email" placeholder="Email id">
-<input id="gender" placeholder="Gender">
-<input id="dob" placeholder="Date of Birth">
-<input id="marital" placeholder="Marital Status">
-<input id="religion" placeholder="Religion">
-<input id="nation" placeholder="Nationality">
-<input id="lang" placeholder="Languages Known">
-<input id="education" placeholder="Education">
-<input id="experience" placeholder="Experience">
-<textarea id="address" placeholder="Address"></textarea>
+<label>Name</label><input id="name">
+<label>Father’s Name</label><input id="father">
+<label>Mobile</label><input id="mobile">
+<label>Email ID</label><input id="email">
 
-<input id="place" placeholder="Place">
-<label>Select Date</label>
-<input id="date" type="date">
+<label>Gender</label>
+<select id="gender">
+<option value="">Select</option><option>Male</option><option>Female</option><option>Others</option>
+</select>
 
-<input type="file" id="photoInput" accept="image/*">
+<label>Date of Birth</label>
+<input type="date" id="dob">
 
-<button onclick="startGenerate()">Generate Bio Data</button>
+<label>Marital Status</label>
+<select id="marital">
+<option value="">Select</option><option>Single</option><option>Married</option><option>Unmarried</option><option>Divorced</option>
+</select>
+
+<label>Blood Group</label>
+<select id="blood">
+<option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+</select>
+
+<label>Religion</label>
+<select id="religion">
+<option value="">Select</option><option>Hindu</option><option>Muslim</option><option>Sikh</option><option>Christian</option>
+</select>
+
+<label>Nationality</label>
+<select id="nationality"><option selected>Indian</option></select>
+
+<label>Languages Known</label><input id="language">
+<label>Education</label><input id="education">
+<label>Experience</label><input id="experience">
+<label>Address</label><textarea id="address" rows="3"></textarea>
+
+<label>Place</label><input id="place">
+<label>Date (Optional)</label><input type="date" id="cdate">
+
+<button onclick="startDownload('jpg')">Download JPG</button>
+<button onclick="startDownload('pdf')">Download PDF</button>
 </div>
 
-<!-- LOADER -->
-<div id="overlay">
-  <div class="spinner"></div>
+<div id="overlay"><div class="android-spinner"></div></div>
+
+<div id="biodata">
+<div class="bio-header">BIO DATA</div>
+
+<div class="bio-top">
+<table>
+<tr><td class="label">Name</td><td class="colon">:</td><td class="value" id="p_name"></td></tr>
+<tr><td class="label">Father’s Name</td><td class="colon">:</td><td class="value" id="p_father"></td></tr>
+<tr><td class="label">Mobile</td><td class="colon">:</td><td class="value" id="p_mobile"></td></tr>
+<tr><td class="label">Email ID</td><td class="colon">:</td><td class="value" id="p_email"></td></tr>
+<tr><td class="label">Gender</td><td class="colon">:</td><td class="value" id="p_gender"></td></tr>
+<tr><td class="label">Date of Birth</td><td class="colon">:</td><td class="value" id="p_dob"></td></tr>
+<tr><td class="label">Marital Status</td><td class="colon">:</td><td class="value" id="p_marital"></td></tr>
+<tr><td class="label">Blood Group</td><td class="colon">:</td><td class="value" id="p_blood"></td></tr>
+<tr><td class="label">Religion</td><td class="colon">:</td><td class="value" id="p_religion"></td></tr>
+<tr><td class="label">Nationality</td><td class="colon">:</td><td class="value" id="p_nationality"></td></tr>
+<tr><td class="label">Languages Known</td><td class="colon">:</td><td class="value" id="p_language"></td></tr>
+<tr><td class="label">Education</td><td class="colon">:</td><td class="value" id="p_education"></td></tr>
+<tr><td class="label">Experience</td><td class="colon">:</td><td class="value" id="p_experience"></td></tr>
+<tr><td class="label">Address</td><td class="colon">:</td><td class="value" id="p_address"></td></tr>
+</table>
+
+<div class="photo-box"><img id="p_photo"></div>
 </div>
 
-<!-- BIODATA -->
-<div id="bioBox">
-
-<div class="header">
-  <div class="title">BIO DATA</div>
-  <div class="underline"></div>
-</div>
-
-<div class="top">
-<div>
-  <div class="row"><span class="label">Name</span> : <span id="p_name"></span></div>
-  <div class="row"><span class="label">Father’s Name</span> : <span id="p_fname"></span></div>
-  <div class="row"><span class="label">Mobile</span> : <span id="p_mobile"></span></div>
-  <div class="row"><span class="label">Email id</span> : <span id="p_email"></span></div>
-  <div class="row"><span class="label">Gender</span> : <span id="p_gender"></span></div>
-  <div class="row"><span class="label">Date of Birth</span> : <span id="p_dob"></span></div>
-  <div class="row"><span class="label">Marital Status</span> : <span id="p_marital"></span></div>
-  <div class="row"><span class="label">Religion</span> : <span id="p_religion"></span></div>
-  <div class="row"><span class="label">Nationality</span> : <span id="p_nation"></span></div>
-  <div class="row"><span class="label">Languages Known</span> : <span id="p_lang"></span></div>
-  <div class="row"><span class="label">Education</span> : <span id="p_education"></span></div>
-  <div class="row"><span class="label">Experience</span> : <span id="p_experience"></span></div>
-  <div class="row"><span class="label">Address</span> : <span id="p_address"></span></div>
-</div>
-
-<div class="photo">
-  <img id="p_photo">
-</div>
-</div>
-
-<div class="section">Declaration</div>
-<p>
+<div class="declaration">
+<b>Declaration</b><br>
 I hereby declare that all the information provided here is true to the best of my knowledge.
-</p>
+</div>
 
-<div class="footer">
+<div class="sign-row">
 <div>
-  Place : <span id="p_place"></span><br><br>
-  Date : <span id="p_date"></span>
+<b>Place :</b> <span id="p_place"></span><br>
+<b>Date :</b> <span id="p_date"></span>
 </div>
-<div>Signature</div>
+<div class="signature-box">
+<div class="signature-line"></div>
+<b>Signature</b>
+</div>
 </div>
 
-<button class="download-btn" onclick="downloadPDF()">DOWNLOAD PDF</button>
-
-</div>
 </div>
 
 <script>
-function startGenerate(){
-  overlay.style.display="flex";
-  setTimeout(generate,1500);
+/* 🔥 DATE FORMATTER (DD-MM-YYYY) */
+function formatDate(val){
+  if(!val) return "-";
+  const [y,m,d]=val.split("-");
+  return d+"-"+m+"-"+y;
 }
 
-function generate(){
+function v(id){return document.getElementById(id).value || "-";}
+
+function fillData(){
+ p_name.innerText=v("name");
+ p_father.innerText=v("father");
+ p_mobile.innerText=v("mobile");
+ p_email.innerText=v("email");
+ p_gender.innerText=v("gender");
+
+ /* ✅ DATE FORMAT APPLIED */
+ p_dob.innerText=formatDate(document.getElementById("dob").value);
+
+ p_marital.innerText=v("marital");
+ p_blood.innerText=v("blood");
+ p_religion.innerText=v("religion");
+ p_nationality.innerText=v("nationality");
+ p_language.innerText=v("language");
+ p_education.innerText=v("education");
+ p_experience.innerText=v("experience");
+ p_address.innerText=v("address");
+ p_place.innerText=v("place");
+ p_date.innerText=formatDate(document.getElementById("cdate").value);
+
+ if(photo.files[0]){
+  const r=new FileReader();
+  r.onload=e=>p_photo.src=e.target.result;
+  r.readAsDataURL(photo.files[0]);
+ }
+}
+
+function startDownload(type){
+ overlay.style.display="flex";
+ setTimeout(()=>{
   overlay.style.display="none";
-  formBox.style.display="none";
-  bioBox.style.display="block";
+  type==="jpg" ? downloadJPG() : downloadPDF();
+ },1500);
+}
 
-  const fields=[
-    "name","fname","mobile","email","gender","dob",
-    "marital","religion","nation","lang",
-    "education","experience","address","place","date"
-  ];
-  fields.forEach(f=>{
-    document.getElementById("p_"+f).innerText =
-    document.getElementById(f).value;
-  });
-
-  const file=photoInput.files[0];
-  if(file){
-    const r=new FileReader();
-    r.onload=e=>p_photo.src=e.target.result;
-    r.readAsDataURL(file);
-  }
+function downloadJPG(){
+ fillData();
+ biodata.style.display="block";
+ html2canvas(biodata,{scale:2,backgroundColor:"#fff"}).then(c=>{
+  const a=document.createElement("a");
+  a.download="Biodata.jpg";
+  a.href=c.toDataURL("image/jpeg",0.95);
+  a.click();
+  biodata.style.display="none";
+ });
 }
 
 function downloadPDF(){
-  const el = document.getElementById("bioBox");
-  const name = p_name.innerText || "BioData";
-
-  html2pdf().set({
-    margin: 10,
-    filename: name+"_Biodata.pdf",
-    image: { type:"jpeg", quality:0.98 },
-    html2canvas: { scale:2 },
-    jsPDF: { unit:"mm", format:"a4", orientation:"portrait" }
-  }).from(el).save();
+ fillData();
+ biodata.style.display="block";
+ html2canvas(biodata,{scale:2,backgroundColor:"#fff"}).then(canvas=>{
+  const img=canvas.toDataURL("image/jpeg",1);
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF("p","mm","a4");
+  pdf.addImage(img,"JPEG",0,0,210,297);
+  pdf.save("Biodata.pdf");
+  biodata.style.display="none";
+ });
 }
 </script>
 

@@ -9,31 +9,147 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-/* --- (CSS SAME AS BEFORE, NO CHANGE) --- */
-body{margin:0;background:#0f2f1f;font-family:Arial,sans-serif;}
-.container{max-width:520px;margin:15px auto;background:#eafff2;padding:15px;border-radius:10px;border:1px solid #8be0b0;}
+body{
+  margin:0;
+  background:#0f2f1f;
+  font-family:Arial, sans-serif;
+}
+
+/* FORM */
+.container{
+  max-width:520px;
+  margin:15px auto;
+  background:#eafff2;
+  padding:15px;
+  border-radius:10px;
+  border:1px solid #8be0b0;
+}
+
 h2{text-align:center;color:#145c3a;}
-label{font-weight:bold;margin-top:10px;display:block;color:#145c3a;}
-input,textarea,select{width:100%;padding:9px;font-size:14px;border-radius:5px;border:1px solid #8be0b0;background:#f6fffa;box-sizing:border-box;}
+
+label{
+  font-weight:bold;
+  margin-top:10px;
+  display:block;
+  color:#145c3a;
+}
+
+input, textarea, select{
+  width:100%;
+  padding:9px;
+  font-size:14px;
+  border-radius:5px;
+  border:1px solid #8be0b0;
+  background:#f6fffa;
+  box-sizing:border-box;
+}
+
 textarea{resize:none;}
-button{width:100%;margin-top:12px;padding:12px;font-size:16px;background:#1f7a4a;color:#fff;border:none;border-radius:6px;cursor:pointer;}
-#overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:9999;}
-.android-spinner{width:56px;height:56px;border:6px solid rgba(255,255,255,.3);border-top:6px solid #7CFFB2;border-radius:50%;animation:spin 1s linear infinite;}
+
+button{
+  width:100%;
+  margin-top:12px;
+  padding:12px;
+  font-size:16px;
+  background:#1f7a4a;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* FULL PAGE ANDROID SPINNER */
+#overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+  backdrop-filter:blur(4px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.android-spinner{
+  width:56px;
+  height:56px;
+  border:6px solid rgba(255,255,255,0.3);
+  border-top:6px solid #7CFFB2;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
 @keyframes spin{to{transform:rotate(360deg);}}
-#biodata{width:210mm;min-height:297mm;padding:24mm;background:#fff;display:none;font-size:20px;line-height:1.85;}
-.bio-header{text-align:center;font-size:32px;font-weight:bold;text-decoration:underline;margin-bottom:28px;}
-.bio-top{display:flex;gap:18px;}
-.photo-box{width:115px;height:130px;border:1px solid #000;margin-left:-22px;margin-top:6px;}
-.photo-box img{width:100%;height:100%;object-fit:cover;}
-table{width:100%;border-collapse:collapse;}
-td{padding:7px 4px;vertical-align:top;}
+
+/* OUTPUT A4 */
+#biodata{
+  width:210mm;
+  min-height:297mm;
+  padding:24mm;
+  background:#fff;
+  display:none;
+  font-size:20px;
+  line-height:1.85;
+}
+
+.bio-header{
+  text-align:center;
+  font-size:32px;
+  font-weight:bold;
+  text-decoration:underline;
+  margin-bottom:28px;
+}
+
+.bio-top{
+  display:flex;
+  gap:18px;
+}
+
+.photo-box{
+  width:115px;
+  height:130px;
+  border:1px solid #000;
+  margin-left:-22px;
+  margin-top:6px;
+}
+
+.photo-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+td{
+  padding:7px 4px;
+  vertical-align:top;
+}
+
 .label{width:30%;font-weight:bold;}
 .colon{width:3%;text-align:center;font-weight:bold;}
 .value{width:67%;word-break:break-word;}
+
 .declaration{margin-top:30px;}
-.sign-row{margin-top:32px;display:flex;justify-content:space-between;}
-.signature-box{width:160px;text-align:center;}
-.signature-line{border-top:1px solid #000;margin-top:38px;}
+
+.sign-row{
+  margin-top:32px;
+  display:flex;
+  justify-content:space-between;
+}
+
+.signature-box{
+  width:160px;
+  text-align:center;
+}
+
+.signature-line{
+  border-top:1px solid #000;
+  margin-top:38px;
+}
 </style>
 </head>
 
@@ -52,7 +168,10 @@ td{padding:7px 4px;vertical-align:top;}
 
 <label>Gender</label>
 <select id="gender">
-<option value="">Select</option><option>Male</option><option>Female</option><option>Others</option>
+<option value="">Select</option>
+<option>Male</option>
+<option>Female</option>
+<option>Others</option>
 </select>
 
 <label>Date of Birth</label>
@@ -60,21 +179,35 @@ td{padding:7px 4px;vertical-align:top;}
 
 <label>Marital Status</label>
 <select id="marital">
-<option value="">Select</option><option>Single</option><option>Married</option><option>Unmarried</option><option>Divorced</option>
+<option value="">Select</option>
+<option>Single</option>
+<option>Married</option>
+<option>Unmarried</option>
+<option>Divorced</option>
 </select>
 
 <label>Blood Group</label>
 <select id="blood">
-<option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+<option value="">Select</option>
+<option>A+</option><option>A-</option>
+<option>B+</option><option>B-</option>
+<option>AB+</option><option>AB-</option>
+<option>O+</option><option>O-</option>
 </select>
 
 <label>Religion</label>
 <select id="religion">
-<option value="">Select</option><option>Hindu</option><option>Muslim</option><option>Sikh</option><option>Christian</option>
+<option value="">Select</option>
+<option>Hindu</option>
+<option>Muslim</option>
+<option>Sikh</option>
+<option>Christian</option>
 </select>
 
 <label>Nationality</label>
-<select id="nationality"><option selected>Indian</option></select>
+<select id="nationality">
+<option selected>Indian</option>
+</select>
 
 <label>Languages Known</label><input id="language">
 <label>Education</label><input id="education">
@@ -88,7 +221,9 @@ td{padding:7px 4px;vertical-align:top;}
 <button onclick="startDownload('pdf')">Download PDF</button>
 </div>
 
-<div id="overlay"><div class="android-spinner"></div></div>
+<div id="overlay">
+  <div class="android-spinner"></div>
+</div>
 
 <div id="biodata">
 <div class="bio-header">BIO DATA</div>
@@ -111,7 +246,9 @@ td{padding:7px 4px;vertical-align:top;}
 <tr><td class="label">Address</td><td class="colon">:</td><td class="value" id="p_address"></td></tr>
 </table>
 
-<div class="photo-box"><img id="p_photo"></div>
+<div class="photo-box">
+<img id="p_photo">
+</div>
 </div>
 
 <div class="declaration">
@@ -133,7 +270,6 @@ I hereby declare that all the information provided here is true to the best of m
 </div>
 
 <script>
-/* 🔥 DATE FORMATTER (DD-MM-YYYY) */
 function formatDate(val){
   if(!val) return "-";
   const [y,m,d]=val.split("-");
@@ -142,16 +278,14 @@ function formatDate(val){
 
 function v(id){return document.getElementById(id).value || "-";}
 
-function fillData(){
+/* 🔥 FIXED fillData WITH IMAGE LOAD WAIT */
+function fillData(callback){
  p_name.innerText=v("name");
  p_father.innerText=v("father");
  p_mobile.innerText=v("mobile");
  p_email.innerText=v("email");
  p_gender.innerText=v("gender");
-
- /* ✅ DATE FORMAT APPLIED */
  p_dob.innerText=formatDate(document.getElementById("dob").value);
-
  p_marital.innerText=v("marital");
  p_blood.innerText=v("blood");
  p_religion.innerText=v("religion");
@@ -164,42 +298,49 @@ function fillData(){
  p_date.innerText=formatDate(document.getElementById("cdate").value);
 
  if(photo.files[0]){
-  const r=new FileReader();
-  r.onload=e=>p_photo.src=e.target.result;
-  r.readAsDataURL(photo.files[0]);
+   const r=new FileReader();
+   r.onload=e=>{
+     p_photo.onload=()=>callback();
+     p_photo.src=e.target.result;
+   };
+   r.readAsDataURL(photo.files[0]);
+ }else{
+   callback();
  }
 }
 
 function startDownload(type){
  overlay.style.display="flex";
  setTimeout(()=>{
-  overlay.style.display="none";
-  type==="jpg" ? downloadJPG() : downloadPDF();
+   overlay.style.display="none";
+   type==="jpg" ? downloadJPG() : downloadPDF();
  },1500);
 }
 
 function downloadJPG(){
- fillData();
- biodata.style.display="block";
- html2canvas(biodata,{scale:2,backgroundColor:"#fff"}).then(c=>{
-  const a=document.createElement("a");
-  a.download="Biodata.jpg";
-  a.href=c.toDataURL("image/jpeg",0.95);
-  a.click();
-  biodata.style.display="none";
+ fillData(()=>{
+   biodata.style.display="block";
+   html2canvas(biodata,{scale:2,backgroundColor:"#fff"}).then(c=>{
+     const a=document.createElement("a");
+     a.download="Biodata.jpg";
+     a.href=c.toDataURL("image/jpeg",0.95);
+     a.click();
+     biodata.style.display="none";
+   });
  });
 }
 
 function downloadPDF(){
- fillData();
- biodata.style.display="block";
- html2canvas(biodata,{scale:2,backgroundColor:"#fff"}).then(canvas=>{
-  const img=canvas.toDataURL("image/jpeg",1);
-  const {jsPDF}=window.jspdf;
-  const pdf=new jsPDF("p","mm","a4");
-  pdf.addImage(img,"JPEG",0,0,210,297);
-  pdf.save("Biodata.pdf");
-  biodata.style.display="none";
+ fillData(()=>{
+   biodata.style.display="block";
+   html2canvas(biodata,{scale:2,backgroundColor:"#fff"}).then(canvas=>{
+     const img=canvas.toDataURL("image/jpeg",1);
+     const {jsPDF}=window.jspdf;
+     const pdf=new jsPDF("p","mm","a4");
+     pdf.addImage(img,"JPEG",0,0,210,297);
+     pdf.save("Biodata.pdf");
+     biodata.style.display="none";
+   });
  });
 }
 </script>
